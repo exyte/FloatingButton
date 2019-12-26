@@ -24,8 +24,9 @@ ___
 
 # Usage
 
-1. Create main button view and a number of submenu buttons — both should be cast to AnyView type
+1. Create main button view and a number of submenu buttons — both should be cast to `AnyView` type
 2. Pass both to `FloatingButton` constructor:
+
    ```swift
    FloatingButton(mainButtonView: mainButton, buttons: buttons)
    ```
@@ -71,7 +72,7 @@ pod 'FloatingActionButton'
 ### Carthage
 
 ```ogdl
-github 'Exyte/FloatingActionButton'
+github "Exyte/FloatingActionButton"
 ```
 
 ### Manually
