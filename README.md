@@ -24,13 +24,13 @@ ___
 
 # Usage
 
-1. Create main button view and a number of submenu buttons — both should be cast to `AnyView` type
+1. Create main button view and a number of submenu buttons — both should be cast to `AnyView` type.
 2. Pass both to `FloatingButton` constructor:
 
    ```swift
    FloatingButton(mainButtonView: mainButton, buttons: buttons)
    ```
-3. Chain `.straight()` or `.circle()` to specify desired menu type
+3. Chain `.straight()` or `.circle()` to specify desired menu type.
 4. Chain whatever you like afterwards.
 
 ### Universal options
@@ -55,11 +55,11 @@ ___
 ## Examples
 
 To try out the FloatingActionButton examples:
-- Clone the repo `git clone git@github.com:exyte/FloatingActionButton.git`
-- Open terminal and run `cd <FloatingActionButtonRepo>/Example`
-- Run `pod install` to install all dependencies
-- Run `xed .` to open project in the Xcode
-- Try it!
+1. Clone the repo `git clone git@github.com:exyte/FloatingActionButton.git`.
+2. Open terminal and run `cd <FloatingActionButtonRepo>/Example`.
+3. Run `pod install` to install all dependencies.
+4. Run `xed .` to open project in the Xcode.
+5. Try it!
 
 ## Installation
 
