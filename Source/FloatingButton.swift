@@ -395,3 +395,106 @@ struct MenuButtonPreferenceViewSetter: View {
         }
     }
 }
+
+struct CustomFloatingButton: View {
+
+    @State var isOpen = false
+    var mainButtonView: AnyView
+    var buttons: [AnyView]
+    var paths: [Path] = []
+    var animation: Animation = Animation.easeInOut(duration: 0.4)
+    var delays: [Double] = []
+
+    var body: some View {
+
+        ZStack {
+            ForEach((0..<buttons.count), id: \.self) { i in
+                self.buttons[i]
+                    .modifier(AlongPath(t: self.isOpen ? 1 : 0, trajectory: self.paths[i]))
+                    .animation(self.animation.delay(self.delays.isEmpty ? 0 : self.delays[i]))
+            }
+
+            Button(action: {
+                self.isOpen.toggle()
+            }) {
+                mainButtonView
+            }
+        }
+    }
+}
+
+struct AlongPath: GeometryEffect {
+
+    var t: CGFloat
+    var trajectory: Path
+
+    var animatableData: CGFloat {
+        get { t }
+        set { t = newValue }
+    }
+
+    public func effectValue(size: CGSize) -> ProjectionTransform {
+        if let point = trajectory.point(at: t) {
+            return ProjectionTransform(CGAffineTransform(translationX: point.x, y: point.y))
+        }
+        return ProjectionTransform()
+    }
+}
+
+extension CustomFloatingButton {
+
+    static func circle(mainButtonView: AnyView, buttons: [AnyView]) -> CustomFloatingButton {
+        let radius: CGFloat = 60
+        let count = buttons.count
+
+        let coords: [CGPoint] = (0..<count).map { i in
+            let angle = .pi / CGFloat(count - 1) * CGFloat(i) + .pi
+            return CGPoint(x: radius*cos(angle), y: radius*sin(angle))
+        }
+
+        let paths: [Path] = (0..<count).map { i in
+            let endAngle = .pi / CGFloat(count - 1) * CGFloat(i) + .pi
+            var freeform = Path()
+            freeform.move(to: .zero)
+            freeform.addQuadCurve(to: coords[0], control: CGPoint(x: -30, y: 30))
+            freeform.addArc(center: .zero, radius: radius, startAngle: Angle(radians: .pi), endAngle: Angle(radians: Double(endAngle)), clockwise: false)
+            return freeform
+        }
+
+        return CustomFloatingButton(
+            mainButtonView: mainButtonView,
+            buttons: buttons,
+            paths: paths,
+            animation: Animation.spring(response: 0.5, dampingFraction: 0.5, blendDuration: 0.5)
+        )
+    }
+
+    static func fountain(mainButtonView: AnyView, buttons: [AnyView]) -> CustomFloatingButton {
+        let radius: CGFloat = 60
+        let count = buttons.count
+
+        let coords: [CGPoint] = (0..<count).map { i in
+            let angle = .pi / CGFloat(count - 1) * CGFloat(i) + .pi
+            return CGPoint(x: radius*cos(angle), y: radius*sin(angle))
+        }
+
+        let paths: [Path] = (0..<count).map { i in
+            var freeform = Path()
+            freeform.move(to: .zero)
+            freeform.addQuadCurve(to: coords[i], control: CGPoint(x: coords[i].x/2, y: -coords[i].y + 30))
+            return freeform
+        }
+
+        let delays: [Double] = (0..<count).map { i in
+            return 0.1 * Double(i)
+        }
+
+        return CustomFloatingButton(
+            mainButtonView: mainButtonView,
+            buttons: buttons,
+            paths: paths,
+            animation: Animation.spring(response: 0.5, dampingFraction: 0.5, blendDuration: 0.5),
+            delays: delays
+        )
+    }
+}
