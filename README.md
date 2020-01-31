@@ -40,8 +40,7 @@ ___
         .spacing(10)
         .initialOffset(x: -1000)
         .animation(.spring())
-        ```
-    ```swift 
+
     FloatingButton(mainButtonView: mainButton2, buttons: buttonsImage.dropLast())
         .circle()
         .startAngle(3/2 * .pi)
