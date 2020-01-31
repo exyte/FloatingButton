@@ -31,7 +31,23 @@ ___
    FloatingButton(mainButtonView: mainButton, buttons: buttons)
    ```
 3. Chain `.straight()` or `.circle()` to specify desired menu type.
-4. Chain whatever you like afterwards.
+4. Chain whatever you like afterwards. For example:
+    ```swift
+    FloatingButton(mainButtonView: mainButton, buttons: textButtons)
+        .straight()
+        .direction(.top)
+        .alignment(.left)
+        .spacing(10)
+        .initialOffset(x: -1000)
+        .animation(.spring())
+        ```
+    ```swift 
+    FloatingButton(mainButtonView: mainButton2, buttons: buttonsImage.dropLast())
+        .circle()
+        .startAngle(3/2 * .pi)
+        .endAngle(2 * .pi)
+        .radius(70)
+        ```
 
 ### Universal options
 `spacing` - space between submenu buttons  
