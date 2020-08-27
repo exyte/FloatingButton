@@ -34,56 +34,120 @@ struct ScreenIconsAndText: View {
             .spacing(10)
             .initialOpacity(0)
 
-        let mainButton3 = AnyView(MainButton(imageName: "thermometer", colorHex: "f7b731"))
-        let mainButton4 = AnyView(MainButton(imageName: "cloud.fill", colorHex: "eb3b5a"))
-
-        let buttonsImage = (0..<MockData.iconImageNames.count).map { i in
-            AnyView(IconButton(imageName: MockData.iconImageNames[i], color: MockData.colors[i]))
-        }
-
-        let menu3 = FloatingButton(mainButtonView: mainButton3, buttons: buttonsImage)
-            .straight()
-            .direction(.right)
-            .delays(delayDelta: 0.1)
-
-        let menu4 = FloatingButton(mainButtonView: mainButton4, buttons: buttonsImage.dropLast())
-            .straight()
-            .direction(.top)
-            .delays(delayDelta: 0.1)
-
-        let mainButton5 = AnyView(MainButton(imageName: "message.fill", colorHex: "f7b731"))
-        let mainButton6 = AnyView(MainButton(imageName: "umbrella.fill", colorHex: "eb3b5a"))
-
-        let menu5 = FloatingButton(mainButtonView: mainButton5, buttons: buttonsImage.dropLast())
-            .circle()
-            .startAngle(3/2 * .pi)
-            .endAngle(2 * .pi)
-            .radius(70)
-        let menu6 = FloatingButton(mainButtonView: mainButton6, buttons: buttonsImage)
-            .circle()
-            .delays(delayDelta: 0.1)
-
-           return VStack() {
-                Spacer().layoutPriority(10)
-                HStack() {
-                    menu3.padding(20)
-                    Spacer().layoutPriority(10)
-                    menu4.padding(20)
-                }
-                Spacer().layoutPriority(10)
-                HStack() {
-                    menu5.padding(20)
-                    Spacer().layoutPriority(10)
-                    menu6.padding(20)
-                    Spacer().layoutPriority(10)
-                }
+        return NavigationView {
+            VStack() {
                 Spacer().layoutPriority(10)
                 HStack() {
                     menu1.padding(20)
                     Spacer().layoutPriority(10)
                     menu2.padding(20)
                 }
+            }
+            .navigationBarItems(
+                trailing:
+                    NavigationLink(destination: ScreenStraight()) {
+                        Image(systemName: "arrow.right.circle")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                            .padding(.init(top: 0, leading: 0, bottom: 0, trailing: 10))
+                    }
+            )
         }
+    }
+}
+
+struct ScreenStraight: View {
+    
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+
+    var body: some View {
+        let mainButton1 = AnyView(MainButton(imageName: "thermometer", colorHex: "f7b731"))
+        let mainButton2 = AnyView(MainButton(imageName: "cloud.fill", colorHex: "eb3b5a"))
+
+        let buttonsImage = (0..<MockData.iconImageNames.count).map { i in
+            AnyView(IconButton(imageName: MockData.iconImageNames[i], color: MockData.colors[i]))
+        }
+
+        let menu1 = FloatingButton(mainButtonView: mainButton1, buttons: buttonsImage)
+            .straight()
+            .direction(.right)
+            .delays(delayDelta: 0.1)
+        
+        let menu2 = FloatingButton(mainButtonView: mainButton2, buttons: buttonsImage)
+            .straight()
+            .direction(.top)
+            .delays(delayDelta: 0.1)
+
+        return VStack() {
+            Spacer().layoutPriority(10)
+            HStack() {
+                menu1.padding(20)
+                Spacer().layoutPriority(10)
+                menu2.padding(20)
+            }
+        }
+        .navigationBarItems(
+            leading:
+                Button(action: {
+                    self.presentationMode.wrappedValue.dismiss()
+                }) {
+                    Image(systemName: "arrow.left.circle")
+                    .resizable()
+                    .frame(width: 30, height: 30)
+                    .padding(.init(top: 0, leading: 10, bottom: 0, trailing: 0))
+                },
+            trailing:
+                NavigationLink(destination: ScreenCircle()) {
+                    Image(systemName: "arrow.right.circle")
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                        .padding(.init(top: 0, leading: 0, bottom: 0, trailing: 10))
+                }
+        )
+    }
+}
+
+struct ScreenCircle: View {
+    
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+
+    var body: some View {
+        let mainButton1 = AnyView(MainButton(imageName: "message.fill", colorHex: "f7b731"))
+        let mainButton2 = AnyView(MainButton(imageName: "umbrella.fill", colorHex: "eb3b5a"))
+
+        let buttonsImage = (0..<MockData.iconImageNames.count).map { i in
+            AnyView(IconButton(imageName: MockData.iconImageNames[i], color: MockData.colors[i]))
+        }
+
+        let menu1 = FloatingButton(mainButtonView: mainButton2, buttons: buttonsImage.dropLast())
+            .circle()
+            .startAngle(3/2 * .pi)
+            .endAngle(2 * .pi)
+            .radius(70)
+        let menu2 = FloatingButton(mainButtonView: mainButton1, buttons: buttonsImage)
+            .circle()
+            .delays(delayDelta: 0.1)
+
+        return VStack() {
+            Spacer().layoutPriority(10)
+            HStack() {
+                menu1.padding(20)
+                Spacer().layoutPriority(10)
+                menu2.padding(20)
+                Spacer().layoutPriority(10)
+            }
+        }
+        .navigationBarItems(
+            leading:
+                Button(action: {
+                    self.presentationMode.wrappedValue.dismiss()
+                }) {
+                    Image(systemName: "arrow.left.circle")
+                    .resizable()
+                    .frame(width: 30, height: 30)
+                    .padding(.init(top: 0, leading: 10, bottom: 0, trailing: 0))
+                }
+        )
     }
 }
 
@@ -191,7 +255,7 @@ struct MockData {
 }
 
 extension Color {
-
+    
     init(hex: String) {
         let scanner = Scanner(string: hex)
         var rgbValue: UInt64 = 0
@@ -203,5 +267,5 @@ extension Color {
 
         self.init(red: Double(r) / 0xff, green: Double(g) / 0xff, blue: Double(b) / 0xff)
     }
-
+    
 }
