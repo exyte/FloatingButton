@@ -30,8 +30,12 @@ ___
    ```swift
    FloatingButton(mainButtonView: mainButton, buttons: buttons)
    ```
-3. Chain `.straight()` or `.circle()` to specify desired menu type.
-4. Chain whatever you like afterwards. For example:
+3. You may also pass a binding which will determine if the menu is currently open. You may use this to close the menu on any submenu button tap for example. 
+```swift
+FloatingButton(mainButtonView: mainButton, buttons: buttons, isOpen: $isOpen)
+```
+4. Chain `.straight()` or `.circle()` to specify desired menu type.
+5. Chain whatever you like afterwards. For example:
     ```swift
     FloatingButton(mainButtonView: mainButton, buttons: textButtons)
         .straight()

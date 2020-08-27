@@ -43,21 +43,40 @@ public struct FloatingButton: View {
     fileprivate var endAngle: Double = 2 * .pi
     fileprivate var radius: Double?
 
-    @State private var isOpen = false
+    @State private var privateIsOpen: Bool = false
+    var isOpenBinding: Binding<Bool>?
+    var isOpen: Bool {
+        get {
+            if let isOpenBinding = isOpenBinding {
+                return isOpenBinding.wrappedValue
+            }
+            else {
+                return privateIsOpen
+            }
+        }
+    }
+
     @State private var coords: [CGPoint] = []
     @State private var alignmentOffsets: [CGSize] = []
     @State private var initialPositions: [CGPoint] = [] // if there is initial offset
     @State private var sizes: [CGSize] = []
     @State private var mainButtonFrame = CGRect()
 
-    fileprivate init(mainButtonView: AnyView, buttons: [SubmenuButton]) {
+    fileprivate init(mainButtonView: AnyView, buttons: [SubmenuButton], isOpenBinding: Binding<Bool>?) {
         self.mainButtonView = mainButtonView
         self.buttons = buttons
+        self.isOpenBinding = isOpenBinding
     }
 
     public init(mainButtonView: AnyView, buttons: [AnyView]) {
         self.mainButtonView = mainButtonView
         self.buttons = buttons.map{ SubmenuButton(buttonView: $0) }
+    }
+
+    public init(mainButtonView: AnyView, buttons: [AnyView], isOpen: Binding<Bool>) {
+        self.mainButtonView = mainButtonView
+        self.buttons = buttons.map{ SubmenuButton(buttonView: $0) }
+        self.isOpenBinding = isOpen
     }
 
     public var body: some View {
@@ -79,11 +98,7 @@ public struct FloatingButton: View {
                 }
             }
 
-            Button(action: {
-                self.isOpen.toggle()
-            }) {
-                mainButtonView
-            }
+            MainButtonViewInternal(isOpen: isOpenBinding ?? $privateIsOpen, mainButtonView: mainButtonView)
             .buttonStyle(PlainButtonStyle())
             .background(MenuButtonPreferenceViewSetter())
         }
@@ -190,7 +205,7 @@ public struct FloatingButton: View {
     }
 
     public func copy() -> Self {
-        var button = FloatingButton(mainButtonView: self.mainButtonView, buttons: self.buttons)
+        var button = FloatingButton(mainButtonView: self.mainButtonView, buttons: self.buttons, isOpenBinding: isOpenBinding)
         button.menuType = self.menuType
         button.spacing = self.spacing
         button.initialScaling = self.initialScaling
@@ -343,7 +358,9 @@ struct SubmenuButton: View {
     var action: ()->() = {}
 
     var body: some View {
-        Button(action: self.action) {
+        Button(action: {
+            self.action()
+        }) {
             buttonView
         }
         .background(SubmenuButtonPreferenceViewSetter())
@@ -392,6 +409,20 @@ struct MenuButtonPreferenceViewSetter: View {
                 .fill(Color.clear)
                 .preference(key: MenuButtonPreferenceKey.self,
                             value: [geometry.frame(in: .named("FloatingButtonSpace"))])
+        }
+    }
+}
+
+private struct MainButtonViewInternal: View {
+
+    @Binding public var isOpen: Bool
+    fileprivate var mainButtonView: AnyView
+
+    public var body: some View {
+        Button(action: {
+            self.isOpen.toggle()
+        }) {
+            mainButtonView
         }
     }
 }

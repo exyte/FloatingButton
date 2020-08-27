@@ -11,15 +11,20 @@ import FloatingButton
 
 struct ScreenIconsAndText: View {
 
+    @State var isOpen = false
+
     var body: some View {
         let textButtons = (0..<MockData.iconAndTextTitles.count).reversed().map { i in
-            AnyView(IconAndTextButton(imageName: MockData.iconAndTextImageNames[i], buttonText: MockData.iconAndTextTitles[i]))
+            AnyView(IconAndTextButton(imageName: MockData.iconAndTextImageNames[i], buttonText: MockData.iconAndTextTitles[i])
+                        .onTapGesture {
+                            isOpen.toggle()
+                        })
         }
 
         let mainButton1 = AnyView(MainButton(imageName: "star.fill", colorHex: "f7b731", width: 60))
         let mainButton2 = AnyView(MainButton(imageName: "heart.fill", colorHex: "eb3b5a", width: 60))
 
-        let menu1 = FloatingButton(mainButtonView: mainButton1, buttons: textButtons)
+        let menu1 = FloatingButton(mainButtonView: mainButton1, buttons: textButtons, isOpen: $isOpen)
             .straight()
             .direction(.top)
             .alignment(.left)
@@ -51,6 +56,7 @@ struct ScreenIconsAndText: View {
                             .frame(width: 30, height: 30)
                             .padding(.init(top: 0, leading: 0, bottom: 0, trailing: 10))
                     }
+                    .isDetailLink(false)
             )
         }
     }
@@ -86,6 +92,7 @@ struct ScreenStraight: View {
                 menu2.padding(20)
             }
         }
+        .navigationBarBackButtonHidden(true)
         .navigationBarItems(
             leading:
                 Button(action: {
@@ -103,6 +110,7 @@ struct ScreenStraight: View {
                         .frame(width: 30, height: 30)
                         .padding(.init(top: 0, leading: 0, bottom: 0, trailing: 10))
                 }
+                .isDetailLink(false)
         )
     }
 }
@@ -137,6 +145,7 @@ struct ScreenCircle: View {
                 Spacer().layoutPriority(10)
             }
         }
+        .navigationBarBackButtonHidden(true)
         .navigationBarItems(
             leading:
                 Button(action: {
