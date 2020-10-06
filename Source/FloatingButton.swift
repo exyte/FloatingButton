@@ -90,6 +90,7 @@ public struct FloatingButton: View {
             } else {
                 ForEach((0..<buttons.count), id: \.self) { i in
                     self.buttons[i]
+                        .background(SubmenuButtonPreferenceViewSetter())
                         .position(self.buttonCoordinate(at: i))
                         .offset(self.alignmentOffsets.isEmpty ? CGSize.zero : self.alignmentOffsets[i])
                         .scaleEffect(self.isOpen ? CGFloat(1) : self.initialScaling)
@@ -99,8 +100,9 @@ public struct FloatingButton: View {
             }
 
             MainButtonViewInternal(isOpen: isOpenBinding ?? $privateIsOpen, mainButtonView: mainButtonView)
-            .buttonStyle(PlainButtonStyle())
-            .background(MenuButtonPreferenceViewSetter())
+                .buttonStyle(PlainButtonStyle())
+                .background(MenuButtonPreferenceViewSetter())
+                .coordinateSpace(name: "ExampleButtonSpace")
         }
         .onPreferenceChange(SubmenuButtonPreferenceKey.self) { (sizes) in
             self.sizes = sizes
@@ -363,8 +365,6 @@ struct SubmenuButton: View {
         }) {
             buttonView
         }
-        .background(SubmenuButtonPreferenceViewSetter())
-        .coordinateSpace(name: "ExampleButtonSpace")
         .buttonStyle(PlainButtonStyle())
     }
 }

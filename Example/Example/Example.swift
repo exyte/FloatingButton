@@ -41,7 +41,6 @@ struct ScreenIconsAndText: View {
 
         return NavigationView {
             VStack() {
-                Spacer().layoutPriority(10)
                 HStack() {
                     menu1.padding(20)
                     Spacer().layoutPriority(10)
