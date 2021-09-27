@@ -17,7 +17,7 @@ public enum Alignment {
 }
 
 public struct FloatingButton<MainView, ButtonView>: View where MainView: View, ButtonView: View {
-
+    
     fileprivate enum MenuType {
         case straight
         case circle
@@ -114,17 +114,17 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
     
     fileprivate func buttonCoordinate(at i: Int) -> CGPoint {
         return isOpen
-            ? CGPoint(x: mainButtonFrame.midX + coords[i].x,
-                      y: mainButtonFrame.midY + coords[i].y)
-            : CGPoint(x: mainButtonFrame.midX +
-                        (initialPositions.isEmpty ? 0 : initialPositions[i].x),
-                      y: mainButtonFrame.midY +
-                        (initialPositions.isEmpty ? 0 : initialPositions[i].y))
+        ? CGPoint(x: mainButtonFrame.midX + coords[i].x,
+                  y: mainButtonFrame.midY + coords[i].y)
+        : CGPoint(x: mainButtonFrame.midX +
+                  (initialPositions.isEmpty ? 0 : initialPositions[i].x),
+                  y: mainButtonFrame.midY +
+                  (initialPositions.isEmpty ? 0 : initialPositions[i].y))
     }
     
     fileprivate func buttonAnimation(at i: Int) -> Animation {
         return animation.delay(delays.isEmpty ? Double(0) :
-                                        (isOpen ? delays[delays.count - i - 1] : delays[i]))
+                                (isOpen ? delays[delays.count - i - 1] : delays[i]))
     }
     
     fileprivate func calculateCoords() {
