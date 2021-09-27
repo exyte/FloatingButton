@@ -16,89 +16,82 @@ public enum Alignment {
     case left, right, top, bottom, center
 }
 
-public struct FloatingButton: View {
+public struct FloatingButton<MainView, ButtonView>: View where MainView: View, ButtonView: View {
 
     fileprivate enum MenuType {
         case straight
         case circle
     }
-
-    fileprivate var mainButtonView: AnyView
-    fileprivate var buttons: [SubmenuButton]
+    
+    fileprivate var mainButtonView: MainView
+    fileprivate var buttons: [SubmenuButton<ButtonView>]
+    
     fileprivate var menuType: MenuType = .straight
-
     fileprivate var spacing: CGFloat = 10
     fileprivate var initialScaling: CGFloat = 1
     fileprivate var initialOffset: CGPoint = CGPoint()
     fileprivate var initialOpacity: Double = 1
-    fileprivate var animation: Animation = Animation.easeInOut(duration: 0.4)
+    fileprivate var animation: Animation = .easeInOut(duration: 0.4)
     fileprivate var delays: [Double] = []
-
+    
     // straight
     fileprivate var direction: Direction = .left
     fileprivate var alignment: Alignment = .center
-
+    
     // circle
     fileprivate var startAngle: Double = .pi
     fileprivate var endAngle: Double = 2 * .pi
     fileprivate var radius: Double?
-
+    
     @State private var privateIsOpen: Bool = false
     var isOpenBinding: Binding<Bool>?
     var isOpen: Bool {
-        get {
-            if let isOpenBinding = isOpenBinding {
-                return isOpenBinding.wrappedValue
-            }
-            else {
-                return privateIsOpen
-            }
-        }
+        get { isOpenBinding?.wrappedValue ?? privateIsOpen }
     }
-
+    
     @State private var coords: [CGPoint] = []
     @State private var alignmentOffsets: [CGSize] = []
     @State private var initialPositions: [CGPoint] = [] // if there is initial offset
     @State private var sizes: [CGSize] = []
     @State private var mainButtonFrame = CGRect()
-
-    fileprivate init(mainButtonView: AnyView, buttons: [SubmenuButton], isOpenBinding: Binding<Bool>?) {
+    
+    private init(mainButtonView: MainView, buttons: [SubmenuButton<ButtonView>], isOpenBinding: Binding<Bool>?) {
         self.mainButtonView = mainButtonView
         self.buttons = buttons
         self.isOpenBinding = isOpenBinding
     }
-
-    public init(mainButtonView: AnyView, buttons: [AnyView]) {
+    
+    public init(mainButtonView: MainView, buttons: [ButtonView]) {
         self.mainButtonView = mainButtonView
-        self.buttons = buttons.map{ SubmenuButton(buttonView: $0) }
+        self.buttons = buttons.map { SubmenuButton(buttonView: $0) }
     }
-
-    public init(mainButtonView: AnyView, buttons: [AnyView], isOpen: Binding<Bool>) {
+    
+    public init(mainButtonView: MainView, buttons: [ButtonView], isOpen: Binding<Bool>) {
         self.mainButtonView = mainButtonView
-        self.buttons = buttons.map{ SubmenuButton(buttonView: $0) }
+        self.buttons = buttons.map { SubmenuButton(buttonView: $0) }
         self.isOpenBinding = isOpen
     }
-
+    
     public var body: some View {
         ZStack {
-            if self.mainButtonFrame.isEmpty {
+            if mainButtonFrame.isEmpty {
                 ForEach((0..<buttons.count), id: \.self) { i in
-                    self.buttons[i]
-                        .position(CGPoint(x: self.mainButtonFrame.midX,
-                                          y: self.mainButtonFrame.midY))
+                    buttons[i]
+                        .position(CGPoint(x: mainButtonFrame.midX,
+                                          y: mainButtonFrame.midY))
                 }
             } else {
                 ForEach((0..<buttons.count), id: \.self) { i in
-                    self.buttons[i]
+                    buttons[i]
                         .background(SubmenuButtonPreferenceViewSetter())
-                        .position(self.buttonCoordinate(at: i))
-                        .offset(self.alignmentOffsets.isEmpty ? CGSize.zero : self.alignmentOffsets[i])
-                        .scaleEffect(self.isOpen ? CGFloat(1) : self.initialScaling)
-                        .opacity(self.isOpen ? Double(1) : self.initialOpacity)
-                        .animation(self.buttonAnimation(at: i))
+                        .position(buttonCoordinate(at: i))
+                        .offset(alignmentOffsets.isEmpty ? .zero : alignmentOffsets[i])
+                        .scaleEffect(isOpen ? 1 : initialScaling)
+                        .opacity(isOpen ? 1 : initialOpacity)
+                        .animation(buttonAnimation(at: i))
                 }
             }
-
+            
             MainButtonViewInternal(isOpen: isOpenBinding ?? $privateIsOpen, mainButtonView: mainButtonView)
                 .buttonStyle(PlainButtonStyle())
                 .background(MenuButtonPreferenceViewSetter())
@@ -106,32 +99,32 @@ public struct FloatingButton: View {
         }
         .onPreferenceChange(SubmenuButtonPreferenceKey.self) { (sizes) in
             self.sizes = sizes
-            self.calculateCoords()
+            calculateCoords()
         }
         .onPreferenceChange(MenuButtonPreferenceKey.self) { rect in
             if let r = rect.first {
-                self.mainButtonFrame = r
-                self.calculateCoords()
+                mainButtonFrame = r
+                calculateCoords()
             }
         }
         .coordinateSpace(name: "FloatingButtonSpace")
     }
-
+    
     fileprivate func buttonCoordinate(at i: Int) -> CGPoint {
-        return self.isOpen
-        ? CGPoint(x: self.mainButtonFrame.midX + self.coords[i].x,
-                  y: self.mainButtonFrame.midY + self.coords[i].y)
-        : CGPoint(x: self.mainButtonFrame.midX +
-            (self.initialPositions.isEmpty ? 0 : self.initialPositions[i].x),
-                  y: self.mainButtonFrame.midY +
-            (self.initialPositions.isEmpty ? 0 : self.initialPositions[i].y))
+        return isOpen
+        ? CGPoint(x: mainButtonFrame.midX + coords[i].x,
+                  y: mainButtonFrame.midY + coords[i].y)
+        : CGPoint(x: mainButtonFrame.midX +
+                  (initialPositions.isEmpty ? 0 : initialPositions[i].x),
+                  y: mainButtonFrame.midY +
+                  (initialPositions.isEmpty ? 0 : initialPositions[i].y))
     }
-
+    
     fileprivate func buttonAnimation(at i: Int) -> Animation {
-        return self.animation.delay(self.delays.isEmpty ? Double(0) :
-            (self.isOpen ? self.delays[self.delays.count - i - 1] : self.delays[i]))
+        return animation.delay(delays.isEmpty ? Double(0) :
+                                (isOpen ? delays[delays.count - i - 1] : delays[i]))
     }
-
+    
     fileprivate func calculateCoords() {
         switch menuType {
         case .straight:
@@ -140,87 +133,69 @@ public struct FloatingButton: View {
             calculateCoordsCircle()
         }
     }
-
+    
     fileprivate func calculateCoordsStraight() {
         guard sizes.count > 0, !mainButtonFrame.isEmpty else {
             return
         }
-
+        
         var allSizes = [mainButtonFrame.size]
         allSizes.append(contentsOf: sizes)
-
+        
         var coord = CGPoint.zero
         coords = (0..<sizes.count).map { i -> CGPoint in
             let width = allSizes[i].width / 2 + allSizes[i+1].width / 2
             let height = allSizes[i].height / 2 + allSizes[i+1].height / 2
             switch direction {
             case .left:
-                coord = CGPoint(x: coord.x - width - self.spacing, y: coord.y)
+                coord = CGPoint(x: coord.x - width - spacing, y: coord.y)
             case .right:
-                coord = CGPoint(x: coord.x + width + self.spacing, y: coord.y)
+                coord = CGPoint(x: coord.x + width + spacing, y: coord.y)
             case .top:
-                coord = CGPoint(x: coord.x, y: coord.y - height - self.spacing)
+                coord = CGPoint(x: coord.x, y: coord.y - height - spacing)
             case .bottom:
-                coord = CGPoint(x: coord.x, y: coord.y + height + self.spacing)
+                coord = CGPoint(x: coord.x, y: coord.y + height + spacing)
             }
             return coord
         }
-
+        
         if initialOffset.x != 0 || initialOffset.y != 0 {
             initialPositions = (0..<sizes.count).map { i -> CGPoint in
-                return CGPoint(x: self.coords[i].x + self.initialOffset.x,
-                               y: self.coords[i].y + self.initialOffset.y)
+                return CGPoint(x: coords[i].x + initialOffset.x,
+                               y: coords[i].y + initialOffset.y)
             }
         } else {
-            initialPositions = Array(repeating: CGPoint(), count: sizes.count)
+            initialPositions = Array(repeating: .zero, count: sizes.count)
         }
-
+        
         alignmentOffsets = (0..<sizes.count).map { i -> CGSize in
             switch alignment {
             case .left:
-                return CGSize(width: self.sizes[i].width / 2 - mainButtonFrame.width / 2, height: 0)
+                return CGSize(width: sizes[i].width / 2 - mainButtonFrame.width / 2, height: 0)
             case .right:
-                return CGSize(width: -self.sizes[i].width / 2 + mainButtonFrame.width / 2, height: 0)
+                return CGSize(width: -sizes[i].width / 2 + mainButtonFrame.width / 2, height: 0)
             case .top:
-                return CGSize(width: 0, height: self.sizes[i].height / 2 - mainButtonFrame.height / 2)
+                return CGSize(width: 0, height: sizes[i].height / 2 - mainButtonFrame.height / 2)
             case .bottom:
-                return CGSize(width: 0, height: -self.sizes[i].height / 2 + mainButtonFrame.height / 2)
+                return CGSize(width: 0, height: -sizes[i].height / 2 + mainButtonFrame.height / 2)
             case .center:
                 return CGSize()
             }
         }
     }
-
+    
     fileprivate func calculateCoordsCircle() {
-        let count = self.buttons.count
+        let count = buttons.count
         var radius: Double = 60
         if let r = self.radius {
             radius = r
-        }
-        else if let buttonWidth = sizes.first?.width {
-            radius = Double((self.mainButtonFrame.width + buttonWidth) / 2 + self.spacing)
+        } else if let buttonWidth = sizes.first?.width {
+            radius = Double((mainButtonFrame.width + buttonWidth) / 2 + spacing)
         }
         coords = (0..<count).map { i in
-            let angle = (self.endAngle - self.startAngle) / Double(count - 1) * Double(i) + startAngle
+            let angle = (endAngle - startAngle) / Double(count - 1) * Double(i) + startAngle
             return CGPoint(x: radius*cos(angle), y: radius*sin(angle))
         }
-    }
-
-    public func copy() -> Self {
-        var button = FloatingButton(mainButtonView: self.mainButtonView, buttons: self.buttons, isOpenBinding: isOpenBinding)
-        button.menuType = self.menuType
-        button.spacing = self.spacing
-        button.initialScaling = self.initialScaling
-        button.initialOffset = self.initialOffset
-        button.initialOpacity = self.initialOpacity
-        button.animation = self.animation
-        button.delays = self.delays
-        button.direction = self.direction
-        button.alignment = self.alignment
-        button.startAngle = self.startAngle
-        button.endAngle = self.endAngle
-        button.radius = self.radius
-        return button
     }
 }
 
@@ -228,141 +203,133 @@ public class DefaultFloatingButton { fileprivate init() {} }
 public class StraightFloatingButton: DefaultFloatingButton {}
 public class CircleFloatingButton: DefaultFloatingButton {}
 
-public struct FloatingButtonGeneric<T : DefaultFloatingButton>: View {
-    private var floatingButton: FloatingButton
-
-    fileprivate init(floatingButton: FloatingButton) {
+public struct FloatingButtonGeneric<T: DefaultFloatingButton, MainView: View, ButtonView: View>: View {
+    private var floatingButton: FloatingButton<MainView, ButtonView>
+    
+    fileprivate init(floatingButton: FloatingButton<MainView, ButtonView>) {
         self.floatingButton = floatingButton
     }
-
+    
     fileprivate init() {
-         fatalError("don't call this method")
+        fatalError("don't call this method")
     }
-
-    fileprivate func copy() -> Self {
-        var copy = FloatingButtonGeneric(floatingButton: self.floatingButton)
-        copy.floatingButton = self.floatingButton.copy()
-        return copy
-    }
-
+    
     public var body: some View {
         floatingButton
     }
 }
 
 public extension FloatingButton {
-
-    func straight() -> FloatingButtonGeneric<StraightFloatingButton> {
-        var floatingButton = self.copy()
-        floatingButton.menuType = .straight
-        return FloatingButtonGeneric<StraightFloatingButton>(floatingButton: floatingButton)
+    
+    func straight() -> FloatingButtonGeneric<StraightFloatingButton, MainView, ButtonView> {
+        var copy = self
+        copy.menuType = .straight
+        return FloatingButtonGeneric(floatingButton: copy)
     }
-
-    func circle() -> FloatingButtonGeneric<CircleFloatingButton> {
-        var floatingButton = self.copy()
-        floatingButton.menuType = .circle
-        return FloatingButtonGeneric<CircleFloatingButton>(floatingButton: floatingButton)
+    
+    func circle() -> FloatingButtonGeneric<CircleFloatingButton, MainView, ButtonView> {
+        var copy = self
+        copy.menuType = .circle
+        return FloatingButtonGeneric(floatingButton: copy)
     }
 }
 
 public extension FloatingButtonGeneric where T : DefaultFloatingButton {
-
+    
     func spacing(_ spacing: CGFloat) -> FloatingButtonGeneric {
-        var copy = self.copy()
+        var copy = self
         copy.floatingButton.spacing = spacing
         return copy
     }
-
+    
     func initialScaling(_ initialScaling: CGFloat) -> FloatingButtonGeneric {
-        var copy = self.copy()
+        var copy = self
         copy.floatingButton.initialScaling = initialScaling
         return copy
     }
-
+    
     func initialOffset(_ initialOffset: CGPoint) -> FloatingButtonGeneric {
-        var copy = self.copy()
+        var copy = self
         copy.floatingButton.initialOffset = initialOffset
         return copy
     }
-
+    
     func initialOffset(x: CGFloat = 0, y: CGFloat = 0) -> FloatingButtonGeneric {
-        var copy = self.copy()
+        var copy = self
         copy.floatingButton.initialOffset = CGPoint(x: x, y: y)
         return copy
     }
-
+    
     func initialOpacity(_ initialOpacity: Double) -> FloatingButtonGeneric {
-        var copy = self.copy()
+        var copy = self
         copy.floatingButton.initialOpacity = initialOpacity
         return copy
     }
-
+    
     func animation(_ animation: Animation) -> FloatingButtonGeneric {
-        var copy = self.copy()
+        var copy = self
         copy.floatingButton.animation = animation
         return copy
     }
-
+    
     func delays(delayDelta: Double) -> FloatingButtonGeneric {
-        var copy = self.copy()
+        var copy = self
         copy.floatingButton.delays = (0..<self.floatingButton.buttons.count).map { i in
             return delayDelta * Double(i)
         }
         return copy
     }
-
+    
     func delays(_ delays: [Double]) -> FloatingButtonGeneric {
-        var copy = self.copy()
+        var copy = self
         copy.floatingButton.delays = delays
         return copy
     }
 }
 
-public extension FloatingButtonGeneric where T : StraightFloatingButton {
-
-    func direction(_ direction: Direction) -> FloatingButtonGeneric<StraightFloatingButton> {
-        var copy = self.copy()
+public extension FloatingButtonGeneric where T: StraightFloatingButton {
+    
+    func direction(_ direction: Direction) -> FloatingButtonGeneric {
+        var copy = self
         copy.floatingButton.direction = direction
-        return copy as! FloatingButtonGeneric<StraightFloatingButton>
+        return copy
     }
-
-    func alignment(_ alignment: Alignment) -> FloatingButtonGeneric<StraightFloatingButton> {
-        var copy = self.copy()
+    
+    func alignment(_ alignment: Alignment) -> FloatingButtonGeneric {
+        var copy = self
         copy.floatingButton.alignment = alignment
-        return copy as! FloatingButtonGeneric<StraightFloatingButton>
+        return copy
     }
 }
 
-public extension FloatingButtonGeneric where T : CircleFloatingButton {
-
-    func startAngle(_ startAngle: Double) -> FloatingButtonGeneric<CircleFloatingButton> {
-        var copy = self.copy()
+public extension FloatingButtonGeneric where T: CircleFloatingButton {
+    
+    func startAngle(_ startAngle: Double) -> FloatingButtonGeneric {
+        var copy = self
         copy.floatingButton.startAngle = startAngle
-        return copy as! FloatingButtonGeneric<CircleFloatingButton>
+        return copy
     }
-
-    func endAngle(_ endAngle: Double) -> FloatingButtonGeneric<CircleFloatingButton> {
-        var copy = self.copy()
+    
+    func endAngle(_ endAngle: Double) -> FloatingButtonGeneric {
+        var copy = self
         copy.floatingButton.endAngle = endAngle
-        return copy as! FloatingButtonGeneric<CircleFloatingButton>
+        return copy
     }
-
-    func radius(_ radius: Double) -> FloatingButtonGeneric<CircleFloatingButton> {
-        var copy = self.copy()
+    
+    func radius(_ radius: Double) -> FloatingButtonGeneric {
+        var copy = self
         copy.floatingButton.radius = radius
-        return copy as! FloatingButtonGeneric<CircleFloatingButton>
+        return copy
     }
 }
 
-struct SubmenuButton: View {
-
-    var buttonView: AnyView
-    var action: ()->() = {}
-
+struct SubmenuButton<ButtonView: View>: View {
+    
+    var buttonView: ButtonView
+    var action: () -> Void = { }
+    
     var body: some View {
-        Button(action: {
-            self.action()
-        }) {
+        Button(action: { action() }) {
             buttonView
         }
         .buttonStyle(PlainButtonStyle())
@@ -371,16 +338,16 @@ struct SubmenuButton: View {
 
 struct SubmenuButtonPreferenceKey: PreferenceKey {
     typealias Value = [CGSize]
-
+    
     static var defaultValue: Value = []
-
+    
     static func reduce(value: inout Value, nextValue: () -> Value) {
         value.append(contentsOf: nextValue())
     }
 }
 
 struct SubmenuButtonPreferenceViewSetter: View {
-
+    
     var body: some View {
         GeometryReader { geometry in
             Rectangle()
@@ -393,16 +360,16 @@ struct SubmenuButtonPreferenceViewSetter: View {
 
 struct MenuButtonPreferenceKey: PreferenceKey {
     typealias Value = [CGRect]
-
+    
     static var defaultValue: Value = []
-
+    
     static func reduce(value: inout Value, nextValue: () -> Value) {
         value.append(contentsOf: nextValue())
     }
 }
 
 struct MenuButtonPreferenceViewSetter: View {
-
+    
     var body: some View {
         GeometryReader { geometry in
             Rectangle()
@@ -413,15 +380,13 @@ struct MenuButtonPreferenceViewSetter: View {
     }
 }
 
-private struct MainButtonViewInternal: View {
-
+private struct MainButtonViewInternal<MainView: View>: View {
+    
     @Binding public var isOpen: Bool
-    fileprivate var mainButtonView: AnyView
-
+    fileprivate var mainButtonView: MainView
+    
     public var body: some View {
-        Button(action: {
-            self.isOpen.toggle()
-        }) {
+        Button(action: { isOpen.toggle() }) {
             mainButtonView
         }
     }
