@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "FloatingButton"
-  s.version          = "0.0.3"
+  s.version          = "1.0.0"
   s.summary          = "Easily customizable floating button menu created with SwiftUI."
 
   s.homepage         = 'https://github.com/exyte/FloatingButton.git'
