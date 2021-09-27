@@ -17,7 +17,7 @@ public enum Alignment {
 }
 
 public struct FloatingButton<MainView, ButtonView>: View where MainView: View, ButtonView: View {
-    
+
     fileprivate enum MenuType {
         case straight
         case circle
@@ -46,9 +46,7 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
     @State private var privateIsOpen: Bool = false
     var isOpenBinding: Binding<Bool>?
     var isOpen: Bool {
-        get {
-            return isOpenBinding?.wrappedValue ?? privateIsOpen
-        }
+        get { isOpenBinding?.wrappedValue ?? privateIsOpen }
     }
     
     @State private var coords: [CGPoint] = []
@@ -167,7 +165,7 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
                                y: coords[i].y + initialOffset.y)
             }
         } else {
-            initialPositions = Array(repeating: CGPoint(), count: sizes.count)
+            initialPositions = Array(repeating: .zero, count: sizes.count)
         }
         
         alignmentOffsets = (0..<sizes.count).map { i -> CGSize in
@@ -191,8 +189,7 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
         var radius: Double = 60
         if let r = self.radius {
             radius = r
-        }
-        else if let buttonWidth = sizes.first?.width {
+        } else if let buttonWidth = sizes.first?.width {
             radius = Double((mainButtonFrame.width + buttonWidth) / 2 + spacing)
         }
         coords = (0..<count).map { i in

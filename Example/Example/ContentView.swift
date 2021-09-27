@@ -42,8 +42,8 @@ struct ScreenIconsAndText: View {
             .initialOpacity(0)
         
         return NavigationView {
-            VStack() {
-                HStack() {
+            VStack {
+                HStack {
                     menu1.padding(20)
                     Spacer().layoutPriority(10)
                     menu2.padding(20)
@@ -55,7 +55,7 @@ struct ScreenIconsAndText: View {
                         Image(systemName: "arrow.right.circle")
                             .resizable()
                             .frame(width: 30, height: 30)
-                            .padding(.init(top: 0, leading: 0, bottom: 0, trailing: 10))
+                            .padding(.trailing, 10)
                     }
                     .isDetailLink(false)
             )
@@ -84,9 +84,9 @@ struct ScreenStraight: View {
             .direction(.top)
             .delays(delayDelta: 0.1)
         
-        return VStack() {
+        return VStack {
             Spacer().layoutPriority(10)
-            HStack() {
+            HStack {
                 menu1.padding(20)
                 Spacer().layoutPriority(10)
                 menu2.padding(20)
@@ -99,14 +99,14 @@ struct ScreenStraight: View {
                     Image(systemName: "arrow.left.circle")
                         .resizable()
                         .frame(width: 30, height: 30)
-                        .padding(.init(top: 0, leading: 10, bottom: 0, trailing: 0))
+                        .padding(.leading, 10)
                 },
             trailing:
                 NavigationLink(destination: ScreenCircle()) {
                     Image(systemName: "arrow.right.circle")
                         .resizable()
                         .frame(width: 30, height: 30)
-                        .padding(.init(top: 0, leading: 0, bottom: 0, trailing: 10))
+                        .padding(.trailing, 10)
                 }
                 .isDetailLink(false)
         )
@@ -133,9 +133,9 @@ struct ScreenCircle: View {
             .circle()
             .delays(delayDelta: 0.1)
         
-        return VStack() {
+        return VStack {
             Spacer().layoutPriority(10)
-            HStack() {
+            HStack {
                 menu1.padding(20)
                 Spacer().layoutPriority(10)
                 menu2.padding(20)
@@ -149,7 +149,7 @@ struct ScreenCircle: View {
                     Image(systemName: "arrow.left.circle")
                         .resizable()
                         .frame(width: 30, height: 30)
-                        .padding(.init(top: 0, leading: 10, bottom: 0, trailing: 0))
+                        .padding(.leading, 10)
                 }
         )
     }
