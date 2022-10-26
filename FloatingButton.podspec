@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "FloatingButton"
-  s.version          = "1.0.0"
+  s.version          = "1.0.1"
   s.summary          = "Easily customizable floating button menu created with SwiftUI."
 
   s.homepage         = 'https://github.com/exyte/FloatingButton.git'
@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/exyte/FloatingButton.git', :tag => s.version.to_s }
   s.social_media_url = 'http://exyte.com'
 
-  s.ios.deployment_target = '13.0'
+  s.ios.deployment_target = '14.0'
   s.osx.deployment_target = '10.15'
   s.tvos.deployment_target = '13.0'
   s.watchos.deployment_target = '6.0'
