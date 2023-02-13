@@ -104,13 +104,14 @@ github "Exyte/FloatingButton"
 
 ## Requirements
 
-* iOS 13+ / watchOS 13+ / tvOS 13+ / macOS 10.15+
+* iOS 13+ / watchOS 6+ / macOS 10.15+
 * Xcode 11+
 
 ## Our other open source SwiftUI libraries
 [PopupView](https://github.com/exyte/PopupView) - Toasts and popups library    
 [Grid](https://github.com/exyte/Grid) - The most powerful Grid container    
-[ScalingHeaderScrollView](https://github.com/exyte/ScalingHeaderScrollView) - A scroll view with a sticky header which shrinks as you scroll.    
+[ScalingHeaderScrollView](https://github.com/exyte/ScalingHeaderScrollView) - A scroll view with a sticky header which shrinks as you scroll  
+[AnimatedTabBar](https://github.com/exyte/AnimatedTabBar) - A tabbar with number of preset animations         
 [MediaPicker](https://github.com/exyte/mediapicker) - Customizable media picker     
 [ConcentricOnboarding](https://github.com/exyte/ConcentricOnboarding) - Animated onboarding flow    
 [ActivityIndicatorView](https://github.com/exyte/ActivityIndicatorView) - A number of animated loading indicators    
