@@ -88,7 +88,7 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
                         .offset(alignmentOffsets.isEmpty ? .zero : alignmentOffsets[i])
                         .scaleEffect(isOpen ? 1 : initialScaling)
                         .opacity(isOpen ? 1 : initialOpacity)
-                        .animation(buttonAnimation(at: i))
+                        .animation(buttonAnimation(at: i), value: isOpen)
                 }
             }
             
