@@ -20,7 +20,7 @@
 		5B5F39A029CB052D00A4FBDC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		5B5F39A229CB052E00A4FBDC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5B5F39A529CB052E00A4FBDC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		5B5F39AE29CB066400A4FBDC /* FloatingButton */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = FloatingButton; path = ..; sourceTree = "<group>"; };
+		5B8A67B629CD7F0F0079E0BE /* FloatingButton */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = FloatingButton; path = ..; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,7 +38,7 @@
 		5B5F399229CB052D00A4FBDC = {
 			isa = PBXGroup;
 			children = (
-				5B5F39AE29CB066400A4FBDC /* FloatingButton */,
+				5B8A67B629CD7F0F0079E0BE /* FloatingButton */,
 				5B5F399D29CB052D00A4FBDC /* Example */,
 				5B5F399C29CB052D00A4FBDC /* Products */,
 				5B5F39AF29CB06EE00A4FBDC /* Frameworks */,

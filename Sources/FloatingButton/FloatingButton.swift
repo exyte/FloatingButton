@@ -111,7 +111,7 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
     }
     
     fileprivate func buttonCoordinate(at i: Int) -> CGPoint {
-        return isOpen
+        isOpen
         ? CGPoint(x: mainButtonFrame.midX + coords[i].x,
                   y: mainButtonFrame.midY + coords[i].y)
         : CGPoint(x: mainButtonFrame.midX +
@@ -121,8 +121,8 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
     }
     
     fileprivate func buttonAnimation(at i: Int) -> Animation {
-        return animation.delay(delays.isEmpty ? Double(0) :
-                                (isOpen ? delays[delays.count - i - 1] : delays[i]))
+        animation.delay(delays.isEmpty ? Double(0) :
+                            (isOpen ? delays[delays.count - i - 1] : delays[i]))
     }
     
     fileprivate func calculateCoords() {
@@ -138,9 +138,9 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
         guard sizes.count > 0, !mainButtonFrame.isEmpty else {
             return
         }
-        
-        var allSizes = [mainButtonFrame.size]
-        allSizes.append(contentsOf: sizes)
+
+        let sizes = sizes.map { roundToTwoDigits($0) }
+        let allSizes = [roundToTwoDigits(mainButtonFrame.size)] + sizes
         
         var coord = CGPoint.zero
         coords = (0..<sizes.count).map { i -> CGPoint in
@@ -161,8 +161,8 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
         
         if initialOffset.x != 0 || initialOffset.y != 0 {
             initialPositions = (0..<sizes.count).map { i -> CGPoint in
-                return CGPoint(x: coords[i].x + initialOffset.x,
-                               y: coords[i].y + initialOffset.y)
+                CGPoint(x: coords[i].x + initialOffset.x,
+                        y: coords[i].y + initialOffset.y)
             }
         } else {
             initialPositions = Array(repeating: .zero, count: sizes.count)
@@ -182,6 +182,10 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
                 return CGSize()
             }
         }
+    }
+
+    fileprivate func roundToTwoDigits(_ size: CGSize) -> CGSize {
+        CGSize(width: ceil(size.width*100)/100, height: ceil(size.height*100)/100)
     }
     
     fileprivate func calculateCoordsCircle() {
