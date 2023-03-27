@@ -104,8 +104,8 @@ github "Exyte/FloatingButton"
 
 ## Requirements
 
-* iOS 13+ / watchOS 6+ / macOS 10.15+
-* Xcode 11+
+* iOS 14.0+ / macOS 10.15+ / tvOS 14.0+ / watchOS 7.0+
+* Xcode 12+
 
 ## Our other open source SwiftUI libraries
 [PopupView](https://github.com/exyte/PopupView) - Toasts and popups library    
