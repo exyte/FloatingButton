@@ -43,13 +43,12 @@ struct ScreenIconsAndText: View {
             .initialOpacity(0)
         
         return NavigationView {
-            VStack {
-                HStack {
-                    menu1.padding(20)
-                    Spacer().layoutPriority(10)
-                    menu2.padding(20)
-                }
+            HStack {
+                menu1
+                Spacer()
+                menu2
             }
+            .padding(20)
             .navigationBarItems(
                 trailing:
                     NavigationLink(destination: ScreenStraight()) {
@@ -86,12 +85,13 @@ struct ScreenStraight: View {
             .delays(delayDelta: 0.1)
         
         return VStack {
-            Spacer().layoutPriority(10)
+            Spacer()
             HStack {
-                menu1.padding(20)
-                Spacer().layoutPriority(10)
-                menu2.padding(20)
+                menu1
+                Spacer()
+                menu2
             }
+            .padding(20)
         }
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(
@@ -135,13 +135,14 @@ struct ScreenCircle: View {
             .delays(delayDelta: 0.1)
         
         return VStack {
-            Spacer().layoutPriority(10)
+            Spacer()
             HStack {
-                menu1.padding(20)
-                Spacer().layoutPriority(10)
-                menu2.padding(20)
-                Spacer().layoutPriority(10)
+                menu1
+                Spacer()
+                menu2
+                Spacer()
             }
+            .padding(20)
         }
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(

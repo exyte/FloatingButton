@@ -33,6 +33,8 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
     fileprivate var initialOpacity: Double = 1
     fileprivate var animation: Animation = .easeInOut(duration: 0.4)
     fileprivate var delays: [Double] = []
+
+    fileprivate var wholeMenuSize: Binding<CGSize> = .constant(.zero)
     
     // straight
     fileprivate var direction: Direction = .left
@@ -84,8 +86,8 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
                 ForEach((0..<buttons.count), id: \.self) { i in
                     buttons[i]
                         .background(SubmenuButtonPreferenceViewSetter())
-                        .position(buttonCoordinate(at: i))
                         .offset(alignmentOffsets.isEmpty ? .zero : alignmentOffsets[i])
+                        .offset(buttonOffset(at: i))
                         .scaleEffect(isOpen ? 1 : initialScaling)
                         .opacity(isOpen ? 1 : initialOpacity)
                         .animation(buttonAnimation(at: i), value: isOpen)
@@ -97,6 +99,7 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
                 .background(MenuButtonPreferenceViewSetter())
                 .coordinateSpace(name: "ExampleButtonSpace")
         }
+        .frame(width: mainButtonFrame.width, height: mainButtonFrame.height)
         .onPreferenceChange(SubmenuButtonPreferenceKey.self) { (sizes) in
             self.sizes = sizes
             calculateCoords()
@@ -110,14 +113,11 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
         .coordinateSpace(name: "FloatingButtonSpace")
     }
     
-    fileprivate func buttonCoordinate(at i: Int) -> CGPoint {
+    fileprivate func buttonOffset(at i: Int) -> CGSize {
         isOpen
-        ? CGPoint(x: mainButtonFrame.midX + coords[i].x,
-                  y: mainButtonFrame.midY + coords[i].y)
-        : CGPoint(x: mainButtonFrame.midX +
-                  (initialPositions.isEmpty ? 0 : initialPositions[i].x),
-                  y: mainButtonFrame.midY +
-                  (initialPositions.isEmpty ? 0 : initialPositions[i].y))
+        ? CGSize(width: coords[i].x, height: coords[i].y)
+        : CGSize(width: (initialPositions.isEmpty ? 0 : initialPositions[i].x),
+                 height: (initialPositions.isEmpty ? 0 : initialPositions[i].y))
     }
     
     fileprivate func buttonAnimation(at i: Int) -> Animation {
@@ -143,9 +143,15 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
         let allSizes = [roundToTwoDigits(mainButtonFrame.size)] + sizes
         
         var coord = CGPoint.zero
+        wholeMenuSize.wrappedValue = mainButtonFrame.size
         coords = (0..<sizes.count).map { i -> CGPoint in
             let width = allSizes[i].width / 2 + allSizes[i+1].width / 2
             let height = allSizes[i].height / 2 + allSizes[i+1].height / 2
+            wholeMenuSize.wrappedValue = CGSize(
+                width: max(width, wholeMenuSize.wrappedValue.width),
+                height: wholeMenuSize.wrappedValue.height + height + spacing
+            )
+
             switch direction {
             case .left:
                 coord = CGPoint(x: coord.x - width - spacing, y: coord.y)
@@ -196,10 +202,21 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
         } else if let buttonWidth = sizes.first?.width {
             radius = Double((mainButtonFrame.width + buttonWidth) / 2 + spacing)
         }
+
         coords = (0..<count).map { i in
             let angle = (endAngle - startAngle) / Double(count - 1) * Double(i) + startAngle
             return CGPoint(x: radius*cos(angle), y: radius*sin(angle))
         }
+
+        var finalFrame = CGRect(x: mainButtonFrame.minX - mainButtonFrame.width/2, y: mainButtonFrame.minY - mainButtonFrame.height/2, width: mainButtonFrame.width, height: mainButtonFrame.height)
+        let buttonSize = sizes.first?.width ?? 0
+        let buttonRadius = buttonSize / 2
+
+        for coord in coords {
+            finalFrame = finalFrame.union(CGRect(x: coord.x - buttonRadius, y: coord.y - buttonRadius, width: buttonSize, height: buttonSize))
+        }
+
+        wholeMenuSize.wrappedValue = finalFrame.size
     }
 }
 
@@ -287,6 +304,12 @@ public extension FloatingButtonGeneric where T : DefaultFloatingButton {
     func delays(_ delays: [Double]) -> FloatingButtonGeneric {
         var copy = self
         copy.floatingButton.delays = delays
+        return copy
+    }
+
+    func wholeMenuSize(_ wholeMenuSize: Binding<CGSize>) -> FloatingButtonGeneric {
+        var copy = self
+        copy.floatingButton.wholeMenuSize = wholeMenuSize
         return copy
     }
 }

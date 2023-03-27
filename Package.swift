@@ -5,9 +5,10 @@ import PackageDescription
 let package = Package(
 	name: "FloatingButton",
 	platforms: [
-		.macOS(.v10_15),
         .iOS(.v14),
-        .watchOS(.v6)
+		.macOS(.v10_15),
+        .tvOS(.v14),
+        .watchOS(.v7)
     ],
     products: [
     	.library(

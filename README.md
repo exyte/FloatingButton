@@ -59,6 +59,9 @@ FloatingButton(mainButtonView: mainButton, buttons: buttons, isOpen: $isOpen)
 `initialOpacity` - opacity for submenu buttons when the menu is closed  
 `animation` - custom SwiftUI animation like `Animation.easeInOut()` or `Animation.spring()`  
 `delays` - delay for each submenu button's animation start
+    - you can pass array of delayes - one for each element
+    - or you can pass `delayDelta` - then this same delay will be used for each element
+`wholeMenuSize` - pass CGSize binding to get updates of menu's size. Menu's size inclides main button frame and all of elements' frames
 
 ### Straight menu only options
 
