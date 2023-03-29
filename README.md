@@ -59,7 +59,7 @@ FloatingButton(mainButtonView: mainButton, buttons: buttons, isOpen: $isOpen)
 `initialOpacity` - opacity for submenu buttons when the menu is closed  
 `animation` - custom SwiftUI animation like `Animation.easeInOut()` or `Animation.spring()`  
 `delays` - delay for each submenu button's animation start
-    - you can pass array of delayes - one for each element
+    - you can pass array of delays - one for each element
     - or you can pass `delayDelta` - then this same delay will be used for each element
 `wholeMenuSize` - pass CGSize binding to get updates of menu's size. Menu's size inclides main button frame and all of elements' frames
 
@@ -72,16 +72,15 @@ FloatingButton(mainButtonView: mainButton, buttons: buttons, isOpen: $isOpen)
 
 `startAngle`  
 `endAngle`  
-`radius`
+`radius` - distance between center of main button and centers of submenu buttons  
 
 ## Examples
 
 To try out the FloatingButton examples:
 1. Clone the repo `git clone git@github.com:exyte/FloatingButton.git`.
-2. Open terminal and run `cd <FloatingButtonRepo>/Example`.
-3. Run `pod install` to install all dependencies.
-4. Run `xed .` to open project in the Xcode.
-5. Try it!
+2. Open `<FloatingButtonRepo>/Example`.
+3. Run `Example.xcodeproj` - framework is imported as a local SPM package.
+4. Try it!
 
 ## Installation
 

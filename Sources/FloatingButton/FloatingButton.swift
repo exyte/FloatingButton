@@ -99,7 +99,6 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
                 .background(MenuButtonPreferenceViewSetter())
                 .coordinateSpace(name: "ExampleButtonSpace")
         }
-        .frame(width: mainButtonFrame.width, height: mainButtonFrame.height)
         .onPreferenceChange(SubmenuButtonPreferenceKey.self) { (sizes) in
             self.sizes = sizes
             calculateCoords()

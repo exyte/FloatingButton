@@ -43,10 +43,12 @@ struct ScreenIconsAndText: View {
             .initialOpacity(0)
         
         return NavigationView {
-            HStack {
-                menu1
-                Spacer()
-                menu2
+            VStack {
+                HStack {
+                    menu1
+                    Spacer().layoutPriority(10)
+                    menu2
+                }
             }
             .padding(20)
             .navigationBarItems(
