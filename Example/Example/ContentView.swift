@@ -46,7 +46,7 @@ struct ScreenIconsAndText: View {
             VStack {
                 HStack {
                     menu1
-                    Spacer().layoutPriority(10)
+                    Spacer()
                     menu2
                 }
             }
