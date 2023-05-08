@@ -6,7 +6,7 @@ let package = Package(
 	name: "FloatingButton",
 	platforms: [
         .iOS(.v14),
-		.macOS(.v10_15),
+		.macOS(.v11),
         .tvOS(.v14),
         .watchOS(.v7)
     ],
