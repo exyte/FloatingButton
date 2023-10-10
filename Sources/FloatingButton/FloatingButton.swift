@@ -33,6 +33,7 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
     fileprivate var initialOpacity: Double = 1
     fileprivate var animation: Animation = .easeInOut(duration: 0.4)
     fileprivate var delays: [Double] = []
+    fileprivate var mainZStackAlignment: SwiftUI.Alignment = .center
 
     fileprivate var wholeMenuSize: Binding<CGSize> = .constant(.zero)
     fileprivate var menuButtonsSize: Binding<CGSize> = .constant(.zero)
@@ -76,17 +77,17 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
     }
     
     public var body: some View {
-        ZStack {
-                ForEach((0..<buttons.count), id: \.self) { i in
-                    buttons[i]
-                        .background(SubmenuButtonPreferenceViewSetter())
-                        .offset(alignmentOffsets.isEmpty ? .zero : alignmentOffsets[i])
-                        .offset(buttonOffset(at: i))
-                        .scaleEffect(isOpen ? 1 : initialScaling)
-                        .opacity(isOpen ? 1 : initialOpacity)
-                        .animation(buttonAnimation(at: i), value: isOpen)
-                }
-            
+        ZStack(alignment: mainZStackAlignment) {
+            ForEach((0..<buttons.count), id: \.self) { i in
+                buttons[i]
+                    .background(SubmenuButtonPreferenceViewSetter())
+                    .offset(alignmentOffsets.isEmpty ? .zero : alignmentOffsets[i])
+                    .offset(buttonOffset(at: i))
+                    .scaleEffect(isOpen ? 1 : initialScaling)
+                    .opacity(isOpen ? 1 : initialOpacity)
+                    .animation(buttonAnimation(at: i), value: isOpen)
+            }
+
             MainButtonViewInternal(isOpen: isOpenBinding ?? $privateIsOpen, mainButtonView: mainButtonView)
                 .buttonStyle(PlainButtonStyle())
                 .sizeGetter($mainButtonSize)
@@ -307,6 +308,12 @@ public extension FloatingButtonGeneric where T : DefaultFloatingButton {
     func delays(_ delays: [Double]) -> FloatingButtonGeneric {
         var copy = self
         copy.floatingButton.delays = delays
+        return copy
+    }
+
+    func mainZStackAlignment(_ alignment: SwiftUI.Alignment) -> FloatingButtonGeneric {
+        var copy = self
+        copy.floatingButton.mainZStackAlignment = alignment
         return copy
     }
 

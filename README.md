@@ -55,6 +55,7 @@ FloatingButton(mainButtonView: mainButton, buttons: buttons, isOpen: $isOpen)
 `delays` - delay for each submenu button's animation start
     - you can pass array of delays - one for each element
     - or you can pass `delayDelta` - then this same delay will be used for each element
+`mainZStackAlignment` - main button and submenu buttons are contained in one ZStack (not an overlay so the menu has a correct size), you can change this ZStack's alignment with this parameter
 `wholeMenuSize` - pass CGSize binding to get updates of menu's size. Menu's size includes main button frame and all of elements' frames
 `menuButtonsSize` - pass CGSize binding to get updates of combined menu elements' size
 
