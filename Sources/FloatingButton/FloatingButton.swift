@@ -34,6 +34,7 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
     fileprivate var animation: Animation = .easeInOut(duration: 0.4)
     fileprivate var delays: [Double] = []
     fileprivate var mainZStackAlignment: SwiftUI.Alignment = .center
+    fileprivate var inverseZIndex: Bool = false
 
     fileprivate var wholeMenuSize: Binding<CGSize> = .constant(.zero)
     fileprivate var menuButtonsSize: Binding<CGSize> = .constant(.zero)
@@ -86,11 +87,13 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
                     .scaleEffect(isOpen ? 1 : initialScaling)
                     .opacity(mainButtonSize == .zero ? 0 : isOpen ? 1 : initialOpacity)
                     .animation(buttonAnimation(at: i), value: isOpen)
+                    .zIndex(Double(inverseZIndex ? (buttons.count - i - 1) : 1))
             }
 
             MainButtonViewInternal(isOpen: isOpenBinding ?? $privateIsOpen, mainButtonView: mainButtonView)
                 .buttonStyle(PlainButtonStyle())
                 .sizeGetter($mainButtonSize)
+                .zIndex(Double(inverseZIndex ? buttons.count : 0))
         }
         .onPreferenceChange(SubmenuButtonPreferenceKey.self) { (sizes) in
             let sizes = sizes.map { CGSize(width: CGFloat(Int($0.width + 0.5)), height: CGFloat(Int($0.height + 0.5))) }
@@ -332,6 +335,12 @@ public extension FloatingButtonGeneric where T : DefaultFloatingButton {
     func mainZStackAlignment(_ alignment: SwiftUI.Alignment) -> FloatingButtonGeneric {
         var copy = self
         copy.floatingButton.mainZStackAlignment = alignment
+        return copy
+    }
+
+    func inverseZIndex(_ inverse: Bool) -> FloatingButtonGeneric {
+        var copy = self
+        copy.floatingButton.inverseZIndex = inverse
         return copy
     }
 

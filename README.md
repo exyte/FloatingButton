@@ -56,6 +56,7 @@ FloatingButton(mainButtonView: mainButton, buttons: buttons, isOpen: $isOpen)
     - you can pass array of delays - one for each element
     - or you can pass `delayDelta` - then this same delay will be used for each element
 `mainZStackAlignment` - main button and submenu buttons are contained in one ZStack (not an overlay so the menu has a correct size), you can change this ZStack's alignment with this parameter
+`inverseZIndex` - inverse zIndex of mainButton and the children. Use, for example, if you have a negative spacing and want to change the order
 `wholeMenuSize` - pass CGSize binding to get updates of menu's size. Menu's size includes main button frame and all of elements' frames
 `menuButtonsSize` - pass CGSize binding to get updates of combined menu elements' size
 
@@ -102,7 +103,7 @@ github "Exyte/FloatingButton"
 
 ## Requirements
 
-* iOS 14.0+ / macOS 11.0+ / tvOS 14.0+ / watchOS 7.0+
+* iOS 14.0+ / macOS 11.0+ / watchOS 7.0+
 * Xcode 12+
 
 ## Our other open source SwiftUI libraries
