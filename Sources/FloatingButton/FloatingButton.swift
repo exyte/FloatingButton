@@ -84,7 +84,7 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
                     .offset(alignmentOffsets.isEmpty ? .zero : alignmentOffsets[i])
                     .offset(buttonOffset(at: i))
                     .scaleEffect(isOpen ? 1 : initialScaling)
-                    .opacity(isOpen ? 1 : initialOpacity)
+                    .opacity(mainButtonSize == .zero ? 0 : isOpen ? 1 : initialOpacity)
                     .animation(buttonAnimation(at: i), value: isOpen)
             }
 
@@ -175,18 +175,36 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
             }
         }
 
-        wholeMenuSize.wrappedValue = .zero
-        menuButtonsSize.wrappedValue = .zero
+        var buttonsSize = CGSize.zero
         for size in sizes {
-            menuButtonsSize.wrappedValue = CGSize(
-                width: max(size.width, menuButtonsSize.wrappedValue.width),
-                height: menuButtonsSize.wrappedValue.height + size.height + spacing
+            if [.top, .bottom].contains(alignment) {
+                buttonsSize = CGSize(
+                    width: max(size.width, buttonsSize.width),
+                    height: buttonsSize.height + size.height + spacing
+                )
+            } else {
+                buttonsSize = CGSize(
+                    width: buttonsSize.width + size.width + spacing,
+                    height: max(size.height, buttonsSize.height)
+                )
+            }
+        }
+
+        var wholeSize = CGSize.zero
+        if [.top, .bottom].contains(alignment) {
+            wholeSize = CGSize(
+                width: max(buttonsSize.width, mainButtonSize.width),
+                height: buttonsSize.height + mainButtonSize.height
+            )
+        } else {
+            wholeSize = CGSize(
+                width: buttonsSize.width + mainButtonSize.width,
+                height: max(buttonsSize.height, mainButtonSize.height)
             )
         }
-        wholeMenuSize.wrappedValue = CGSize(
-            width: max(menuButtonsSize.wrappedValue.width, mainButtonSize.width),
-            height: menuButtonsSize.wrappedValue.height + mainButtonSize.height
-        )
+
+        menuButtonsSize.wrappedValue = buttonsSize
+        wholeMenuSize.wrappedValue = wholeSize
     }
 
     fileprivate func roundToTwoDigits(_ size: CGSize) -> CGSize {
