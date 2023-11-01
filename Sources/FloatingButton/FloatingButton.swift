@@ -87,13 +87,13 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
                     .scaleEffect(isOpen ? 1 : initialScaling)
                     .opacity(mainButtonSize == .zero ? 0 : isOpen ? 1 : initialOpacity)
                     .animation(buttonAnimation(at: i), value: isOpen)
-                    .zIndex(Double(inverseZIndex ? (buttons.count - i - 1) : 1))
+                    .zIndex(Double(inverseZIndex ? (buttons.count - i - 1) : 0))
             }
 
             MainButtonViewInternal(isOpen: isOpenBinding ?? $privateIsOpen, mainButtonView: mainButtonView)
                 .buttonStyle(PlainButtonStyle())
                 .sizeGetter($mainButtonSize)
-                .zIndex(Double(inverseZIndex ? buttons.count : 0))
+                .zIndex(Double(inverseZIndex ? buttons.count : 1))
         }
         .onPreferenceChange(SubmenuButtonPreferenceKey.self) { (sizes) in
             let sizes = sizes.map { CGSize(width: CGFloat(Int($0.width + 0.5)), height: CGFloat(Int($0.height + 0.5))) }
