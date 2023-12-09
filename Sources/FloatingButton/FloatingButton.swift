@@ -30,7 +30,7 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
     fileprivate var spacing: CGFloat = 10
     fileprivate var initialScaling: CGFloat = 1
     fileprivate var initialOffset: CGPoint = CGPoint()
-    fileprivate var initialOpacity: Double = 1
+    fileprivate var initialOpacity: Double = 0.0
     fileprivate var animation: Animation = .easeInOut(duration: 0.4)
     fileprivate var delays: [Double] = []
     fileprivate var mainZStackAlignment: SwiftUI.Alignment = .center
