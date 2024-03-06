@@ -48,7 +48,7 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
     fileprivate var alignment: Alignment = .center
     
     // circle
-    fileprivate var rotation: LayoutDirection = .clockwise
+    fileprivate var layoutDirection: LayoutDirection = .clockwise
     fileprivate var startAngle: Double = .pi
     fileprivate var endAngle: Double = 2 * .pi
     fileprivate var radius: Double?
@@ -234,7 +234,7 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
 
         coords = (0..<count).map { i in
             let increment = (endAngle - startAngle) / Double(count - 1) * Double(i)
-            let angle = rotation == .clockwise ? startAngle + increment : startAngle - increment
+            let angle = layoutDirection == .clockwise ? startAngle + increment : startAngle - increment
             
             return CGPoint(x: radius*cos(angle), y: radius*sin(angle))
         }
@@ -401,7 +401,7 @@ public extension FloatingButtonGeneric where T: CircleFloatingButton {
 
     func layoutDirection(_ layoutDirection: LayoutDirection) -> FloatingButtonGeneric {
         var copy = self
-        copy.floatingButton.rotation = layoutDirection
+        copy.floatingButton.layoutDirection = layoutDirection
         return copy
     }
 
