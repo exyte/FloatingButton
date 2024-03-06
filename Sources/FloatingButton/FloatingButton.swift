@@ -12,7 +12,7 @@ public enum Direction {
     case left, right, top, bottom
 }
 
-public enum Rotation {
+public enum LayoutDirection {
     case clockwise, counterClockwise
 }
 
@@ -48,7 +48,7 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
     fileprivate var alignment: Alignment = .center
     
     // circle
-    fileprivate var rotation: Rotation = .clockwise
+    fileprivate var rotation: LayoutDirection = .clockwise
     fileprivate var startAngle: Double = .pi
     fileprivate var endAngle: Double = 2 * .pi
     fileprivate var radius: Double?
@@ -399,9 +399,9 @@ public extension FloatingButtonGeneric where T: CircleFloatingButton {
         return copy
     }
 
-    func layoutDirection(_ rotation: Rotation) -> FloatingButtonGeneric {
+    func layoutDirection(_ layoutDirection: LayoutDirection) -> FloatingButtonGeneric {
         var copy = self
-        copy.floatingButton.rotation = rotation
+        copy.floatingButton.rotation = layoutDirection
         return copy
     }
 
