@@ -119,7 +119,7 @@ struct ScreenCircle: View {
             .delays(delayDelta: 0.1)
         let menu3 = FloatingButton(mainButtonView: mainButton3, buttons: buttonsImage.dropLast())
             .circle()
-            .rotation(.counterclockwise)
+            .layoutDirection(.counterClockwise)
             .startAngle(3/2 * .pi)
             .endAngle(2 * .pi)
             .radius(70)

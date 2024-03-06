@@ -13,7 +13,7 @@ public enum Direction {
 }
 
 public enum Rotation {
-    case clockwise, counterclockwise
+    case clockwise, counterClockwise
 }
 
 public enum Alignment {
@@ -399,7 +399,7 @@ public extension FloatingButtonGeneric where T: CircleFloatingButton {
         return copy
     }
 
-    func rotation(_ rotation: Rotation) -> FloatingButtonGeneric {
+    func layoutDirection(_ rotation: Rotation) -> FloatingButtonGeneric {
         var copy = self
         copy.floatingButton.rotation = rotation
         return copy
