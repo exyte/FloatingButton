@@ -44,7 +44,7 @@ FloatingButton(mainButtonView: mainButton, buttons: buttons, isOpen: $isOpen)
         .startAngle(3/2 * .pi)
         .endAngle(2 * .pi)
         .radius(70)
-        .rotation(.counterclockwise)
+        .layoutDirection(.counterClockwise)
     ```
 
 ### Universal options
