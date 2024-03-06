@@ -12,6 +12,10 @@ public enum Direction {
     case left, right, top, bottom
 }
 
+public enum LayoutDirection {
+    case clockwise, counterClockwise
+}
+
 public enum Alignment {
     case left, right, top, bottom, center
 }
@@ -44,6 +48,7 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
     fileprivate var alignment: Alignment = .center
     
     // circle
+    fileprivate var rotation: LayoutDirection = .clockwise
     fileprivate var startAngle: Double = .pi
     fileprivate var endAngle: Double = 2 * .pi
     fileprivate var radius: Double?
@@ -228,7 +233,9 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
         }
 
         coords = (0..<count).map { i in
-            let angle = (endAngle - startAngle) / Double(count - 1) * Double(i) + startAngle
+            let increment = (endAngle - startAngle) / Double(count - 1) * Double(i)
+            let angle = rotation == .clockwise ? startAngle + increment : startAngle - increment
+            
             return CGPoint(x: radius*cos(angle), y: radius*sin(angle))
         }
 
@@ -391,6 +398,13 @@ public extension FloatingButtonGeneric where T: CircleFloatingButton {
         copy.floatingButton.radius = radius
         return copy
     }
+
+    func layoutDirection(_ layoutDirection: LayoutDirection) -> FloatingButtonGeneric {
+        var copy = self
+        copy.floatingButton.rotation = layoutDirection
+        return copy
+    }
+
 }
 
 struct SubmenuButton<ButtonView: View>: View {
