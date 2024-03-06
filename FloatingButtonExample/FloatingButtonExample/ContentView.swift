@@ -104,6 +104,7 @@ struct ScreenCircle: View {
     var body: some View {
         let mainButton1 = MainButton(imageName: "message.fill", colorHex: "f7b731")
         let mainButton2 = MainButton(imageName: "umbrella.fill", colorHex: "eb3b5a")
+        let mainButton3 = MainButton(imageName: "message.fill", colorHex: "f7b731")
         let buttonsImage = MockData.iconImageNames.enumerated().map { index, value in
             IconButton(imageName: value, color: MockData.colors[index])
         }
@@ -116,6 +117,12 @@ struct ScreenCircle: View {
         let menu2 = FloatingButton(mainButtonView: mainButton1, buttons: buttonsImage)
             .circle()
             .delays(delayDelta: 0.1)
+        let menu3 = FloatingButton(mainButtonView: mainButton3, buttons: buttonsImage.dropLast())
+            .circle()
+            .rotation(.counterclockwise)
+            .startAngle(3/2 * .pi)
+            .endAngle(2 * .pi)
+            .radius(70)
 
         return VStack {
             Spacer()
@@ -124,6 +131,7 @@ struct ScreenCircle: View {
                 Spacer()
                 menu2
                 Spacer()
+                menu3
             }
             .padding(20)
         }

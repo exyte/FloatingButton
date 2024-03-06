@@ -44,6 +44,7 @@ FloatingButton(mainButtonView: mainButton, buttons: buttons, isOpen: $isOpen)
         .startAngle(3/2 * .pi)
         .endAngle(2 * .pi)
         .radius(70)
+        .rotation(.counterclockwise)
     ```
 
 ### Universal options
@@ -70,6 +71,7 @@ FloatingButton(mainButtonView: mainButton, buttons: buttons, isOpen: $isOpen)
 `startAngle`  
 `endAngle`  
 `radius` - distance between center of main button and centers of submenu buttons  
+`rotation` - changes the button layout direction from the startAngle to the endAngle
 
 ## Examples
 
