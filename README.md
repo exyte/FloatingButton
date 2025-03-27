@@ -9,11 +9,11 @@
 
 <p><h4>Easily customizable floating button menu created with SwiftUI</h4></p>
 
+![](https://img.shields.io/github/v/tag/exyte/FloatingButton?label=Version)
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fexyte%2FFloatingButton%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/exyte/FloatingButton)
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fexyte%2FFloatingButton%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/exyte/FloatingButton)
-[![SPM Compatible](https://img.shields.io/badge/SwiftPM-Compatible-brightgreen.svg)](https://swiftpackageindex.com/exyte/FloatingButton)
-[![Cocoapods Compatible](https://img.shields.io/badge/cocoapods-Compatible-brightgreen.svg)](https://cocoapods.org/pods/FloatingButton)
-[![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-brightgreen.svg?style=flat)](https://github.com/Carthage/Carthage)
+[![SPM](https://img.shields.io/badge/SPM-Compatible-brightgreen.svg)](https://swiftpackageindex.com/exyte/FloatingButton)
+[![Cocoapods](https://img.shields.io/badge/Cocoapods-Deprecated%20after%201.3.0-yellow.svg)](https://cocoapods.org/pods/FloatingButton)
 [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](https://opensource.org/licenses/MIT)
 
 # Usage
@@ -75,32 +75,19 @@ FloatingButton(mainButtonView: mainButton, buttons: buttons, isOpen: $isOpen)
 
 ## Examples
 
-To try out the FloatingButton examples:
-1. Clone the repo `git clone git@github.com:exyte/FloatingButton.git`.
-2. Open `<FloatingButtonRepo>/Example`.
-3. Run `Example.xcodeproj` - framework is imported as a local SPM package.
-4. Try it!
+To try the FloatingButton examples:
+- Clone the repo `https://github.com/exyte/FloatingButton.git`
+- Open `FloatingButtonExample.xcodeproj` in the Xcode
+- Try it!
 
 ## Installation
 
-### Swift Package Manager
+### [Swift Package Manager](https://swift.org/package-manager/)
 
 ```swift
 dependencies: [
     .package(url: "https://github.com/exyte/FloatingButton.git")
 ]
-```
-
-### CocoaPods
-
-```ruby
-pod 'FloatingButton'
-```
-
-### Carthage
-
-```ogdl
-github "Exyte/FloatingButton"
 ```
 
 ## Requirements

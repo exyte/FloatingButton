@@ -102,9 +102,11 @@ public struct FloatingButton<MainView, ButtonView>: View where MainView: View, B
         }
         .onPreferenceChange(SubmenuButtonPreferenceKey.self) { (sizes) in
             let sizes = sizes.map { CGSize(width: CGFloat(Int($0.width + 0.5)), height: CGFloat(Int($0.height + 0.5))) }
-            if sizes != self.sizes {
-                self.sizes = sizes
-                calculateCoords()
+            DispatchQueue.main.async {
+                if sizes != self.sizes {
+                    self.sizes = sizes
+                    calculateCoords()
+                }
             }
         }
         .onChange(of: mainButtonSize) { _ in

@@ -42,7 +42,7 @@ struct SizeGetter: ViewModifier {
 struct SubmenuButtonPreferenceKey: PreferenceKey {
     typealias Value = [CGSize]
 
-    static var defaultValue: Value = []
+    static let defaultValue: Value = []
 
     static func reduce(value: inout Value, nextValue: () -> Value) {
         value.append(contentsOf: nextValue())
