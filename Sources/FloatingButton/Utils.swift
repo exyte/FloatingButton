@@ -28,9 +28,10 @@ struct SizeGetter: ViewModifier {
         content
             .background(
                 GeometryReader { proxy -> Color in
-                    if proxy.size != self.size {
-                        DispatchQueue.main.async {
-                            self.size = proxy.size
+                    let newSize = proxy.size
+                    DispatchQueue.main.async {
+                        if self.size != newSize {
+                            self.size = newSize
                         }
                     }
                     return Color.clear
@@ -56,7 +57,7 @@ struct SubmenuButtonPreferenceViewSetter: View {
             Rectangle()
                 .fill(Color.clear)
                 .preference(key: SubmenuButtonPreferenceKey.self,
-                            value: [geometry.frame(in: .global).size])
+                            value: [geometry.size])
         }
     }
 }
